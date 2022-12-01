@@ -4,12 +4,8 @@ using namespace sf;
 
 int main()
 {
-	// Устанавливаем 8-й уровень сглаживания
-	ContextSettings settings;
-	settings.antialiasingLevel = 8;
-
 	// Объект, который, собственно, является главным окном приложения
-	RenderWindow window(VideoMode(500, 300), "SFML Works!", Style::Default, settings);
+	RenderWindow window(VideoMode(600, 300), "SFML Works!");
 
 	// Главный цикл приложения. Выполняется, пока открыто окно
 	while (window.isOpen())
@@ -23,96 +19,43 @@ int main()
 				// тогда закрываем его
 				window.close();
 		}
-		window.clear(Color(250, 220, 100, 0));
+		window.clear(Color::White);
 
-		// Создаем круг радиусом 50
-		CircleShape circle(50.f);
-		circle.setFillColor(Color(230, 0, 230)); // закрашиваем наш круг 
-		circle.setOutlineThickness(15.f); // устанавливаем толщину контура круга
-		circle.setOutlineColor(Color(80, 220, 50)); // устанавливаем цвет контура
-		circle.move(15, 15); // перемещаем наш круг для корректного отображения в окне
-		window.draw(circle); // отрисовка круга
+		// Создаем переменную текстуры
+		Texture texture;
 
-		// Создаем треугольник
-		CircleShape triangle(65.f, 3);
-		triangle.setPosition(125, 0); // устанавливаем начальную позицию справа от круга
-		triangle.setFillColor(Color::Blue); // устанавливаем цвет треугольника - синий
-		window.draw(triangle); // отрисовка треугольника
+		// Подгружаем нашу текстуру из файла texture.png
+		texture.loadFromFile("wall.jpg");
 
-		// Создаем квадрат
-		CircleShape square(60.f, 4);
-		square.setPosition(250, 0); // устанавливаем начальную позицию справа от треугольника
-		square.setFillColor(Color::Red); // устанавливаем цвет квадрата - красный
-		window.draw(square); // отрисовка квадрата
+		// Создаем 5 спрайтов для примера
+		Sprite sprite1(texture);
+		Sprite sprite2(texture);
+		Sprite sprite3(texture);
+		Sprite sprite4(texture);
+		Sprite sprite5(texture);
 
-		// Создаем октагон
-		CircleShape octagon(60.f, 8);
-		octagon.setPosition(380, 0); // устанавливаем начальную позицию справа от квадрата
-		octagon.setFillColor(Color::Cyan); // устанавливаем цвет октагона - бирюзовый
-		window.draw(octagon); // отрисовка октагона
+		// Позиция
+		sprite1.setPosition(10.f, 30.f); // абсолютное значение
+		sprite2.move(170.f, 10.f); // смещение относительно текущей позиции
 
-		// Заготовка фигуры многоугольника 
-		ConvexShape convex;
+		// Вращение
+		sprite3.setPosition(450.f, 30.f); // сначала сдвинем наш спрайт в сторону
+		//sprite3.setRotation(45.f); // абсолютное значение в 45°
+		sprite3.rotate(15.f); // можно задать смещение относительно текущего значения угла (+15°)
 
-		// Устанавливаем ему 5 вершин
-		convex.setPointCount(5);
+		// Масштаб
+		sprite4.setPosition(10, 150); // сначала сдвинем наш спрайт вниз
+		sprite4.setScale(0.3f, 0.9f); // абсолютное значение масштаба
 
-		// Устанавливаем координаты вершин
-		convex.setPoint(0, Vector2f(0.f, 0.f));
-		convex.setPoint(1, Vector2f(150.f, 10.f));
-		convex.setPoint(2, Vector2f(120.f, 90.f));
-		convex.setPoint(3, Vector2f(30.f, 100.f));
-		convex.setPoint(4, Vector2f(5.f, 50.f));
+		sprite5.setPosition(100, 170); // сначала сдвинем наш спрайт в сторону
+		sprite5.scale(1.5f, 0.2); // смещение параметров масштабирования относительно текущих значений
 
-		// Устанавливаем цвет многоугольника - черный
-		convex.setFillColor(Color::Black);
-
-		// Теперь сдвинем его вниз и чуть-чуть вправо
-		convex.move(1, 150);
-
-		// Отрисовка многоугольника
-		window.draw(convex);
-
-		// Создаем прямоугольник размером 70х100
-		RectangleShape rectangle(Vector2f(70.f, 100.f));
-
-		// Перемещаем его в нижний ряд справа от многоугольника
-		rectangle.move(165, 150);
-
-		// Устанавливаем ему цвет
-		rectangle.setFillColor(Color(175, 180, 240));
-
-		// Отрисовка прямоугольника
-		window.draw(rectangle);
-
-		// Линия с заданной толщиной
-		RectangleShape line_with_thickness(Vector2f(130.f, 5.f));
-
-		// Поворачиваем её на 45 градусов
-		line_with_thickness.rotate(45.f);
-
-		// Устанавливаем цвет
-		line_with_thickness.setFillColor(Color(15, 180, 140));
-
-		// Перемещаем её в нижний ряд справа от прямоугольника
-		line_with_thickness.move(250, 150);
-
-		// Отрисовка линии
-		window.draw(line_with_thickness);
-
-		Vertex line_without_thickness[] =
-		{
-			// Координата первой вершины
-			Vertex(Vector2f(390.f, 240.f)),
-			// Координата второй вершины
-			Vertex(Vector2f(470.f, 150.f))
-		};
-
-		// Устанавливаем цвет линии - черный
-		line_without_thickness->color = Color::Black;
-
-		// Отрисовка линии
-		window.draw(line_without_thickness, 2, Lines);
+		// Отрисовка всех спрайтов
+		window.draw(sprite1);
+		window.draw(sprite2);
+		window.draw(sprite3);
+		window.draw(sprite4);
+		window.draw(sprite5);
 
 		// Отрисовка окна	
 		window.display();
